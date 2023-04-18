@@ -1,62 +1,110 @@
+
 import cv2
 import numpy as np
-import argparse
 import os
 
-def detect_objects(image_path, output_path=\"output.jpg\"):
+# Configuration
+MODEL_CONFIG = os.getenv("MODEL_CONFIG", "yolov3.cfg")
+MODEL_WEIGHTS = os.getenv("MODEL_WEIGHTS", "yolov3.weights")
+CLASSES_FILE = os.getenv("CLASSES_FILE", "coco.names")
+CONF_THRESHOLD = float(os.getenv("CONF_THRESHOLD", 0.5))
+NMS_THRESHOLD = float(os.getenv("NMS_THRESHOLD", 0.4))
+
+def load_model():
     """
-    Simulates object detection on an image and saves the result.
-    For demonstration, it draws a fixed bounding box and label.
+    Loads the YOLOv3 model and class names.
+
+    Returns:
+        tuple: The loaded model, output layers, and class names.
+    """
+    print("Loading YOLOv3 model...")
+    if not os.path.exists(MODEL_CONFIG) or not os.path.exists(MODEL_WEIGHTS):
+        print("Error: Model config or weights file not found. Please download them.")
+        return None, None, None
+
+    net = cv2.dnn.readNet(MODEL_WEIGHTS, MODEL_CONFIG)
+    with open(CLASSES_FILE, "r") as f:
+        classes = [line.strip() for line in f.readlines()]
+    
+    layer_names = net.getLayerNames()
+    output_layers = [layer_names[i - 1] for i in net.getUnconnectedOutLayers()]
+    print("YOLOv3 model loaded successfully.")
+    return net, output_layers, classes
+
+def detect_objects(image_path, net, output_layers, classes):
+    """
+    Detects objects in an image using the YOLOv3 model.
+
+    Args:
+        image_path (str): Path to the input image.
+        net: The loaded YOLOv3 model.
+        output_layers: The output layers of the model.
+        classes (list): The list of class names.
+
+    Returns:
+        np.array: The image with detected objects and bounding boxes.
     """
     if not os.path.exists(image_path):
         print(f"Error: Image file not found at {image_path}")
-        return
+        return None
 
-    # Load the image
-    image = cv2.imread(image_path)
-    if image is None:
-        print(f"Error: Could not load image from {image_path}")
-        return
+    img = cv2.imread(image_path)
+    height, width, channels = img.shape
 
-    # Get image dimensions
-    h, w, _ = image.shape
+    blob = cv2.dnn.blobFromImage(img, 0.00392, (416, 416), (0, 0, 0), True, crop=False)
+    net.setInput(blob)
+    outs = net.forward(output_layers)
 
-    # Simulate a detection (e.g., a car in the center)
-    # Bounding box format: (x_min, y_min, x_max, y_max)
-    x_min, y_min, x_max, y_max = int(w * 0.2), int(h * 0.3), int(w * 0.8), int(h * 0.7)
-    label = \"Simulated Object\"
-    confidence = 0.95
+    class_ids = []
+    confidences = []
+    boxes = []
 
-    # Draw bounding box
-    color = (0, 255, 0)  # Green color
-    thickness = 2
-    cv2.rectangle(image, (x_min, y_min), (x_max, y_max), color, thickness)
+    for out in outs:
+        for detection in out:
+            scores = detection[5:]
+            class_id = np.argmax(scores)
+            confidence = scores[class_id]
+            if confidence > CONF_THRESHOLD:
+                center_x = int(detection[0] * width)
+                center_y = int(detection[1] * height)
+                w = int(detection[2] * width)
+                h = int(detection[3] * height)
 
-    # Put label and confidence
-    text = f\"{label}: {confidence:.2f}\"
-    font = cv2.FONT_HERSHEY_SIMPLEX
-    font_scale = 0.7
-    font_thickness = 2
-    text_size = cv2.getTextSize(text, font, font_scale, font_thickness)[0]
-    text_x = x_min
-    text_y = y_min - 10 if y_min - 10 > 10 else y_min + text_size[1] + 10
-    cv2.putText(image, text, (text_x, text_y), font, font_scale, color, font_thickness, cv2.LINE_AA)
+                x = int(center_x - w / 2)
+                y = int(center_y - h / 2)
 
-    # Save the output image
-    cv2.imwrite(output_path, image)
-    print(f"Detection result saved to {output_path}")
+                boxes.append([x, y, w, h])
+                confidences.append(float(confidence))
+                class_ids.append(class_id)
 
-if __name__ == \"__main__\":
-    parser = argparse.ArgumentParser(description=\"Simulated Object Detection Script.\")
-    parser.add_argument(\"--image_path\", type=str, required=True, help=\"Path to the input image.\")
-    parser.add_argument(\"--output_path\", type=str, default=\"detected_image.jpg\", help=\"Path to save the output image.\")
-    args = parser.parse_args()
+    indexes = cv2.dnn.NMSBoxes(boxes, confidences, CONF_THRESHOLD, NMS_THRESHOLD)
 
-    # Create a dummy image for testing if it doesn't exist
-    if not os.path.exists(args.image_path):
-        print(f"Creating a dummy image at {args.image_path} for demonstration.")
-        dummy_image = np.zeros((400, 600, 3), dtype=np.uint8) # Black image
-        cv2.putText(dummy_image, \"Dummy Image\", (150, 200), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 2, cv2.LINE_AA)
-        cv2.imwrite(args.image_path, dummy_image)
+    font = cv2.FONT_HERSHEY_PLAIN
+    for i in range(len(boxes)):
+        if i in indexes:
+            x, y, w, h = boxes[i]
+            label = str(classes[class_ids[i]])
+            color = (0, 255, 0)
+            cv2.rectangle(img, (x, y), (x + w, y + h), color, 2)
+            cv2.putText(img, label, (x, y + 30), font, 3, color, 3)
 
-    detect_objects(args.image_path, args.output_path)
+    return img
+
+if __name__ == "__main__":
+    # Example usage
+    # Before running, download yolov3.weights, yolov3.cfg, and coco.names
+    # wget https://pjreddie.com/media/files/yolov3.weights
+    # wget https://github.com/pjreddie/darknet/blob/master/cfg/yolov3.cfg?raw=true -O yolov3.cfg
+    # wget https://raw.githubusercontent.com/pjreddie/darknet/master/data/coco.names
+    
+    # Create a dummy image for testing if one doesn\\'t exist
+    if not os.path.exists("test_image.jpg"):
+        dummy_image = np.zeros((600, 800, 3), dtype=np.uint8)
+        cv2.imwrite("test_image.jpg", dummy_image)
+
+    net, output_layers, classes = load_model()
+    if net is not None:
+        result_image = detect_objects("test_image.jpg", net, output_layers, classes)
+        if result_image is not None:
+            cv2.imwrite("result_image.jpg", result_image)
+            print("Object detection complete. Result saved to result_image.jpg")
