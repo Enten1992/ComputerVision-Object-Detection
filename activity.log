@@ -738,3 +738,4 @@
 2023-05-15T00:00:00 - 8 - Adjust hyperparameters for better convergence
 2023-05-15T00:00:00 - 9 - Update documentation and README
 2023-05-15T00:00:00 - 10 - Optimize training loop
+2023-05-15T00:00:00 - 11 - Add comments to complex functions
