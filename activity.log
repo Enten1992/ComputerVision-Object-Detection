@@ -742,3 +742,4 @@
 2023-05-15T00:00:00 - 12 - Fix issue with model saving and loading
 2023-05-15T00:00:00 - 13 - Implement new feature for model evaluation
 2023-05-15T00:00:00 - 14 - Add support for new dataset
+2023-05-15T00:00:00 - 15 - Update dependencies in requirements.txt
