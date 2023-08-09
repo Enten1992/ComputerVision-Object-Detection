@@ -782,3 +782,4 @@
 2023-08-09T00:00:00 - 5 - Update dependencies in requirements.txt
 2023-08-09T00:00:00 - 6 - Implement new feature for model evaluation
 2023-08-09T00:00:00 - 7 - Fix minor bugs in data preprocessing
+2023-08-09T00:00:00 - 8 - Fix issue with model saving and loading
