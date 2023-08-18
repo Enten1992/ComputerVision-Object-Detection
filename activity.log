@@ -800,3 +800,4 @@
 2023-08-18T00:00:00 - 6 - Fix issue with model saving and loading
 2023-08-18T00:00:00 - 7 - Update dependencies in requirements.txt
 2023-08-18T00:00:00 - 8 - Add support for new dataset
+2023-08-18T00:00:00 - 9 - Add unit tests for core modules
