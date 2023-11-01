@@ -868,3 +868,4 @@
 2023-11-01T00:00:00 - 2 - Update dependencies in requirements.txt
 2023-11-01T00:00:00 - 3 - Fix issue with model saving and loading
 2023-11-01T00:00:00 - 4 - Adjust hyperparameters for better convergence
+2023-11-01T00:00:00 - 5 - Add unit tests for core modules
