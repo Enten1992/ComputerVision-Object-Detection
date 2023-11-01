@@ -866,3 +866,4 @@
 2023-11-01T00:00:00 - 0 - Clean up code and remove unused imports
 2023-11-01T00:00:00 - 1 - Improve error handling in API endpoints
 2023-11-01T00:00:00 - 2 - Update dependencies in requirements.txt
+2023-11-01T00:00:00 - 3 - Fix issue with model saving and loading
