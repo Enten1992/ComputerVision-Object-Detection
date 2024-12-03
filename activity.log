@@ -163,3 +163,4 @@
 2024-11-12T00:00:00 - 5 - Refactor model architecture for better performance
 2024-11-12T00:00:00 - 6 - Fix minor bugs in data preprocessing
 2024-11-12T00:00:00 - 7 - Adjust hyperparameters for better convergence
+2024-12-03T00:00:00 - 0 - Add unit tests for core modules
