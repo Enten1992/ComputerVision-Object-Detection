@@ -171,3 +171,4 @@
 2024-12-03T00:00:00 - 5 - Adjust hyperparameters for better convergence
 2024-12-03T00:00:00 - 6 - Fix issue with model saving and loading
 2024-12-11T00:00:00 - 0 - Add unit tests for core modules
+2024-12-11T00:00:00 - 1 - Fix issue with model saving and loading
