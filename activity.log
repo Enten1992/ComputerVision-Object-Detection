@@ -22,3 +22,4 @@
 2025-01-03T00:00:00 - Adjust hyperparameters for better convergence
 2025-01-17T00:00:00 - Fix minor bugs in data preprocessing
 2025-01-17T00:00:00 - Fix minor bugs in data preprocessing
+2025-01-29T00:00:00 - Fix issue with model saving and loading
