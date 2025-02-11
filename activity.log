@@ -28,3 +28,4 @@
 2025-01-29T00:00:00 - Fix issue with model saving and loading
 2025-02-11T00:00:00 - Add unit tests for core modules
 2025-02-11T00:00:00 - Update project structure
+2025-02-11T00:00:00 - Adjust hyperparameters for better convergence
