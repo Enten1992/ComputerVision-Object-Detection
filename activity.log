@@ -231,3 +231,4 @@
 2025-02-19T00:00:00 - 10 - Update documentation and README
 2025-02-19T00:00:00 - 11 - Optimize training loop
 2025-02-19T00:00:00 - 12 - Optimize training loop
+2025-02-19T00:00:00 - 13 - Fix issue with model saving and loading
