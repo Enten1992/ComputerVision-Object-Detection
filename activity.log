@@ -240,3 +240,4 @@
 2025-02-20T00:00:00 - 2 - Update dependencies in requirements.txt
 2025-02-20T00:00:00 - 3 - Add support for new dataset
 2025-03-05T00:00:00 - 0 - Implement new feature for model evaluation
+2025-03-05T00:00:00 - 1 - Update project structure
