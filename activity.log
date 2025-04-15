@@ -1608,3 +1608,4 @@
 2025-04-15T00:00:00 - 0 - Add unit tests for core modules
 2025-04-15T00:00:00 - 1 - Fix issue with model saving and loading
 2025-04-15T00:00:00 - 2 - Update dependencies in requirements.txt
+2025-04-15T00:00:00 - 3 - Improve error handling in API endpoints
