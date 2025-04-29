@@ -1065,3 +1065,4 @@
 2025-04-29T00:00:00 - 2 - Adjust hyperparameters for better convergence
 2025-04-29T00:00:00 - 3 - Update documentation and README
 2025-04-29T00:00:00 - 4 - Add support for new dataset
+2025-04-29T00:00:00 - 5 - Fix issue with model saving and loading
