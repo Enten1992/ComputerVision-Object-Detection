@@ -1772,3 +1772,4 @@
 2025-12-02T00:00:00 - 14 - Improve error handling in API endpoints
 2025-12-02T00:00:00 - 15 - Implement new feature for model evaluation
 2025-12-02T00:00:00 - 16 - Add support for new dataset
+2025-12-02T00:00:00 - 17 - Add unit tests for core modules
